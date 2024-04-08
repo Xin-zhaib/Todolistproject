@@ -1,0 +1,32 @@
+.item-header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    h4{
+        max-width: 45vw;
+        font-size: 14px;
+        margin-right: 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.modal-content{
+    display: flex;
+    flex-direction: column;
+    grid-gap: 16px;
+    p{
+        font-size: 14px;
+        span{
+            display: inline-block;
+            width: 100px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+    }
+    a{
+        color: aqua;
+    }
+}
