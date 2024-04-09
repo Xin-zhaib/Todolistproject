@@ -23,6 +23,7 @@ import {
 import Styles from "./index.module.scss";
 import WebcamBox from "../WebcamBox";
 import Item from "../Item";
+import UploadBox from "../upload";
 
 const TabsValue = [
   {
@@ -48,6 +49,8 @@ function Home() {
   const [activeKey, setActiveKey] = useState("ALL");
   const [location, setLocation] = useState();
   const [checkValue, setCheckValue] = useState([]);
+  const [selectImage, setSelectImage] = useState("photograph");
+  //
 
   const { res } = useSelector((state) => state.home);
   const dispatch = useDispatch();
@@ -58,7 +61,9 @@ function Home() {
     await form.setFieldsValue({
       state: "Active",
       location,
+      selectImage: "photograph",
     });
+    setSelectImage("photograph");
   };
 
   const onSubmit = () => {
@@ -94,6 +99,7 @@ function Home() {
 
   const onEdit = (editData) => {
     console.log(editData);
+    setSelectImage(editData?.selectImage);
     form.setFieldsValue({ ...editData, location });
     setOpen(true);
     setIsEdit(true);
@@ -107,6 +113,12 @@ function Home() {
     return res.filter((v) => {
       return v.state === activeKey;
     });
+  };
+
+  const onValuesChange = (changedValues) => {
+    if (changedValues.selectImage) {
+      setSelectImage(changedValues.selectImage);
+    }
   };
 
   useEffect(() => {
@@ -212,7 +224,12 @@ function Home() {
         className={Styles["modal-box"]}
         header={isEdit ? "Edit task" : "Add task"}
         content={
-          <Form form={form} layout="vertical" className={Styles["from-box"]}>
+          <Form
+            form={form}
+            layout="vertical"
+            className={Styles["from-box"]}
+            onValuesChange={onValuesChange}
+          >
             <Form.Item
               name="task_name"
               label="task name"
@@ -250,6 +267,17 @@ function Home() {
               )}
             </Form.Item>
             <Form.Item
+              name="selectImage"
+              label="Select how the image is saved!"
+            >
+              <Radio.Group>
+                <Space direction="horizontal">
+                  <Radio value="photograph">photograph</Radio>
+                  <Radio value="upload">upload</Radio>
+                </Space>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item
               name="picture"
               label="picture"
               rules={[
@@ -259,7 +287,7 @@ function Home() {
                 },
               ]}
             >
-              <WebcamBox />
+              {selectImage === "photograph" ? <WebcamBox /> : <UploadBox />}
             </Form.Item>
           </Form>
         }
